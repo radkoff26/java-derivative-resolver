@@ -4,10 +4,26 @@ import com.radkoff26.calculus.model.Expression;
 import com.radkoff26.calculus.model.ExpressionValue;
 import com.radkoff26.calculus.model.Operation;
 
-public class StringExpressionParser {
+public class ExpressionResolver implements Resolver<String> {
     private static final int MAX_PRIORITY = 2;
+    private static ExpressionResolver INSTANCE;
 
-    private static int getPriority(char op) {
+    private ExpressionResolver() {
+    }
+
+    public static ExpressionResolver getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ExpressionResolver();
+        }
+        return INSTANCE;
+    }
+
+    @Override
+    public Expression resolve(String s) {
+        return build(s, 0, s.length());
+    }
+
+    private int getPriority(char op) {
         switch (op) {
             case '+':
             case '-':
@@ -15,11 +31,12 @@ public class StringExpressionParser {
             case '*':
             case '/':
                 return 2;
+            default:
+                return 0;
         }
-        return 0;
     }
 
-    private static Operation getOperation(char op) {
+    private Operation getOperation(char op) {
         switch (op) {
             case '+':
                 return Operation.ADD;
@@ -29,22 +46,12 @@ public class StringExpressionParser {
                 return Operation.MUL;
             case '/':
                 return Operation.DIV;
+            default:
+                return null;
         }
-        return null;
     }
 
-    public static double parseExpression(String ex) {
-        return calculate(build(ex, 0, ex.length()));
-    }
-
-    private static double calculate(Expression expression) {
-        if (expression.getExpressionValue().isOperation()) {
-            return calculateOperation(calculate(expression.getLeftOperand()), expression.getExpressionValue().getOperation(), calculate(expression.getRightOperand()));
-        }
-        return Double.parseDouble(expression.getExpressionValue().getValue());
-    }
-
-    private static Expression build(String s, int startInclusive, int endExclusive) {
+    private Expression build(String s, int startInclusive, int endExclusive) {
         int folding = 0;
         int minPriorityOperationIndex = -1;
         int minPriority = Integer.MAX_VALUE;
@@ -58,13 +65,10 @@ public class StringExpressionParser {
                     minPriorityOperationIndex = cursor;
                 }
             } else {
-                switch (s.charAt(cursor)) {
-                    case '(':
-                        folding++;
-                        break;
-                    case ')':
-                        folding--;
-                        break;
+                if (s.charAt(cursor) == '(') {
+                    folding++;
+                } else if (s.charAt(cursor) == ')') {
+                    folding--;
                 }
             }
             cursor++;
@@ -82,19 +86,5 @@ public class StringExpressionParser {
         Expression leftOperand = build(s, startInclusive, minPriorityOperationIndex);
         Expression rightOperand = build(s, minPriorityOperationIndex + 1, endExclusive);
         return new Expression(leftOperand, new ExpressionValue(getOperation(s.charAt(minPriorityOperationIndex))), rightOperand);
-    }
-
-    private static double calculateOperation(double leftOperand, Operation op, double rightOperand) {
-        switch (op) {
-            case ADD:
-                return leftOperand + rightOperand;
-            case SUB:
-                return leftOperand - rightOperand;
-            case MUL:
-                return leftOperand * rightOperand;
-            case DIV:
-                return leftOperand / rightOperand;
-        }
-        return 0;
     }
 }

@@ -29,4 +29,32 @@ public class Expression {
     public Expression getRightOperand() {
         return rightOperand;
     }
+
+    public void setLeftOperand(Expression leftOperand) {
+        this.leftOperand = leftOperand;
+    }
+
+    public void setExpressionValue(ExpressionValue expressionValue) {
+        this.expressionValue = expressionValue;
+    }
+
+    public void setRightOperand(Expression rightOperand) {
+        this.rightOperand = rightOperand;
+    }
+
+    @Override
+    public String toString() {
+        if (expressionValue.isValue()) {
+            return expressionValue.getValue();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        sb.append(leftOperand.toString());
+        sb.append(" ");
+        sb.append(expressionValue.getOperation().getDefinition());
+        sb.append(" ");
+        sb.append(rightOperand.toString());
+        sb.append(")");
+        return sb.toString();
+    }
 }

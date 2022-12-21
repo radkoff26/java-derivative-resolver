@@ -1,10 +1,15 @@
 package com.radkoff26.calculus;
 
-import com.radkoff26.calculus.resolver.StringExpressionParser;
+import com.radkoff26.calculus.model.Expression;
+import com.radkoff26.calculus.resolver.DerivativeResolver;
+import com.radkoff26.calculus.resolver.ExpressionResolver;
+import com.radkoff26.calculus.resolver.Resolver;
 
 public class Main {
     public static void main(String[] args) {
-        // TODO: fix unary minus operation
-        System.out.println(StringExpressionParser.parseExpression("(12 - 28) * (56 / 8)"));
+        Resolver<String> expressionResolver = ExpressionResolver.getInstance();
+        Resolver<Expression> derivativeResolver = DerivativeResolver.getInstance();
+        Expression expression = expressionResolver.resolve("200000 + 1 / x");
+        System.out.println(derivativeResolver.resolve(expression));
     }
 }
