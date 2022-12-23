@@ -1,7 +1,5 @@
 package com.radkoff26.calculus.model;
 
-import java.util.Arrays;
-
 public enum RuleParam {
     LEFT("l"),
     LEFT_DERIVATIVE("ld"),

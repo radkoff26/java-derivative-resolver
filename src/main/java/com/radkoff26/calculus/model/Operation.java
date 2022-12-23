@@ -7,8 +7,11 @@ public enum Operation {
     MUL(2, "*", false),
     POW(3, "^", false),
     LN(3, "ln", true),
+    LOG(3, "log", true),
     SIN(3, "sin", true),
-    COS(3, "cos", true);
+    COS(3, "cos", true),
+    TG(3, "tg", true),
+    CTG(3, "ctg", true);
 
     private final int priority;
     private final String definition;

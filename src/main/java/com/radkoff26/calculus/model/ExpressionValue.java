@@ -10,7 +10,7 @@ public class ExpressionValue {
     public ExpressionValue(ExpressionValue expressionValue) {
         if (expressionValue.isValue()) {
             this.value = expressionValue.value;
-            if (!DoubleUtils.isParseableToDouble(value)) {
+            if (!DoubleUtils.isParseableToDouble(value) && !value.equals("e") && !value.equals("pi")) {
                 isVariable = true;
             }
         } else {
@@ -24,7 +24,7 @@ public class ExpressionValue {
 
     public ExpressionValue(String value) {
         this.value = value;
-        if (!DoubleUtils.isParseableToDouble(value)) {
+        if (!DoubleUtils.isParseableToDouble(value) && !value.equals("e") && !value.equals("pi")) {
             isVariable = true;
         }
     }
@@ -43,7 +43,7 @@ public class ExpressionValue {
 
     public void setValue(String value) {
         this.value = value;
-        if (!DoubleUtils.isParseableToDouble(value)) {
+        if (!DoubleUtils.isParseableToDouble(value) && !value.equals("e") && !value.equals("pi")) {
             isVariable = true;
         }
     }

@@ -10,6 +10,7 @@ import com.radkoff26.calculus.model.ExpressionValue;
 import com.radkoff26.calculus.model.Operation;
 import com.radkoff26.calculus.model.Rule;
 import com.radkoff26.calculus.model.RuleParam;
+import com.radkoff26.calculus.util.DoubleUtils;
 
 public class DerivativeResolver implements Resolver<Expression> {
     private RuleConfig ruleConfig;
@@ -27,10 +28,10 @@ public class DerivativeResolver implements Resolver<Expression> {
     @Override
     public Expression resolve(final Expression expression) {
         if (expression.getExpressionValue().isValue()) {
-            try {
-                Double.parseDouble(expression.getExpressionValue().getValue());
+            String value = expression.getExpressionValue().getValue();
+            if (DoubleUtils.isParseableToDouble(value) || value.equals("e") || value.equals("pi")) {
                 return new Expression(new ExpressionValue("0"));
-            } catch (NumberFormatException e) {
+            } else {
                 return new Expression(new ExpressionValue("1"));
             }
         }
@@ -65,8 +66,12 @@ public class DerivativeResolver implements Resolver<Expression> {
             return null;
         }
         if (expression.getExpressionValue().isValue()) {
-            String value = expression.getExpressionValue().getValue();
-            return map.get(RuleParam.LEFT.getParamByDefinition(value));
+            if (expression.getExpressionValue().isVariable()) {
+                String value = expression.getExpressionValue().getValue();
+                return map.get(RuleParam.LEFT.getParamByDefinition(value));
+            } else {
+                return expression;
+            }
         }
         expression.setLeftOperand(walkAndFillDerivative(expression.getLeftOperand(), map));
         expression.setRightOperand(walkAndFillDerivative(expression.getRightOperand(), map));

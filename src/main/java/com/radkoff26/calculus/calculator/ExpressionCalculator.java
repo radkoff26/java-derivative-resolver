@@ -18,6 +18,12 @@ public class ExpressionCalculator {
             if (expression.getExpressionValue().getValue().equals(variable)) {
                 return valueOfVariable;
             }
+            if (expression.getExpressionValue().getValue().equals("e")) {
+                return Math.E;
+            }
+            if (expression.getExpressionValue().getValue().equals("pi")) {
+                return Math.PI;
+            }
             return Double.parseDouble(expression.getExpressionValue().getValue());
         }
         return calculateExpressionOperation(
@@ -41,10 +47,16 @@ public class ExpressionCalculator {
                 return Math.pow(a, b);
             case LN:
                 return Math.log(a);
+            case LOG:
+                return Math.log(b) / Math.log(a);
             case SIN:
                 return Math.sin(a);
             case COS:
                 return Math.cos(a);
+            case TG:
+                return Math.tan(a);
+            case CTG:
+                return 1 / Math.tan(a);
         }
         return 0;
     }

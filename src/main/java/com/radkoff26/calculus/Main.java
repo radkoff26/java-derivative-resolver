@@ -13,7 +13,7 @@ public class Main {
         Resolver<Expression> derivativeResolver = new DerivativeResolver();
         Resolver<Expression> simplificationResolver = new SimplificationResolver();
         ExpressionCalculator expressionCalculator = new ExpressionCalculator("x");
-        Expression expression = expressionResolver.resolve("(((((sin(x) + 2) * x))))");
+        Expression expression = expressionResolver.resolve("e ^ x");
         Expression derivative = derivativeResolver.resolve(expression);
         System.out.println(derivative);
     }

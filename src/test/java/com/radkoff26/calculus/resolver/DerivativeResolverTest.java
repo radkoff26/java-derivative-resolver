@@ -22,15 +22,29 @@ class DerivativeResolverTest {
     }
 
     @Test
+    void exponentialTest() {
+        Assertions.assertEquals(192, calculate("(x ^ 2) ^ 3", 2), DELTA);
+        Assertions.assertEquals(1, calculate("x ^ x", 1), DELTA);
+        Assertions.assertEquals(2 * Math.E, calculate("e ^ (x ^ 2)", 1), DELTA);
+    }
+
+    @Test
+    void logarithmTest() {
+        Assertions.assertEquals(1 / Math.log(2), calculate("log(2*x,x)", 1), DELTA);
+        Assertions.assertEquals(-1, calculate("ln(cos(x))", Math.PI / 4), DELTA);
+    }
+
+    @Test
     void trigonometricSinAndCosTest() {
         String s = "cos(x) * (2 * x + 4)";
         Assertions.assertEquals(2, calculate(s, 0), DELTA);
         Assertions.assertEquals(-Math.PI - 4, calculate(s, Math.PI / 2), DELTA);
+        Assertions.assertEquals(2 * Math.cos(1), calculate("sin(tg(x))", Math.PI / 4), DELTA);
     }
 
     @Test
-    void exponentialTest() {
-        Assertions.assertEquals(192, calculate("(x ^ 2) ^ 3", 2), DELTA);
-        Assertions.assertEquals(1, calculate("x ^ x", 1), DELTA);
+    void trigonometricTgAndCtgTest() {
+        Assertions.assertEquals(2 * Math.sqrt(Math.PI), calculate("tg(x ^ 2)", Math.sqrt(Math.PI)), DELTA);
+        Assertions.assertEquals(-2, calculate("ctg(2 * x)", Math.PI / 4), DELTA);
     }
 }

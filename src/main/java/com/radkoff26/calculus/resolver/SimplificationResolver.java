@@ -42,9 +42,6 @@ public class SimplificationResolver implements Resolver<Expression> {
                         switch (expression.getExpressionValue().getOperation()) {
                             case ADD:
                                 return expression.getRightOperand();
-                            case SUB:
-                                break; // ??? TODO: unary minus
-//                                return new Expression(new ExpressionValue(rightValue));
                             case MUL:
                             case DIV:
                             case POW:
