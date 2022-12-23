@@ -2,7 +2,6 @@ package com.radkoff26.calculus.resolver;
 
 import java.io.IOException;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.radkoff26.calculus.config.RuleConfig;
@@ -13,7 +12,7 @@ import com.radkoff26.calculus.model.Rule;
 import com.radkoff26.calculus.model.RuleParam;
 
 public class DerivativeResolver implements Resolver<Expression> {
-    public static DerivativeResolver INSTANCE;
+    private static DerivativeResolver instance;
     private RuleConfig ruleConfig;
 
     private DerivativeResolver() {
@@ -25,10 +24,10 @@ public class DerivativeResolver implements Resolver<Expression> {
     }
 
     public static DerivativeResolver getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new DerivativeResolver();
+        if (instance == null) {
+            instance = new DerivativeResolver();
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -68,6 +67,9 @@ public class DerivativeResolver implements Resolver<Expression> {
     }
 
     private Expression walkAndFillDerivative(Expression expression, Map<RuleParam, Expression> map) {
+        if (expression == null) {
+            return null;
+        }
         if (expression.getExpressionValue().isValue()) {
             String value = expression.getExpressionValue().getValue();
             return map.get(RuleParam.LEFT.getParamByDefinition(value));

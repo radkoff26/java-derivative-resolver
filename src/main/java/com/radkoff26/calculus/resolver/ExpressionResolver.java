@@ -1,25 +1,28 @@
 package com.radkoff26.calculus.resolver;
 
+import com.radkoff26.calculus.exception.ExpressionParseException;
 import com.radkoff26.calculus.model.Expression;
 import com.radkoff26.calculus.model.ExpressionValue;
 import com.radkoff26.calculus.model.Operation;
+import com.radkoff26.calculus.util.ExpressionUtils;
 
 public class ExpressionResolver implements Resolver<String> {
-    private static final int MAX_PRIORITY = 2;
-    private static ExpressionResolver INSTANCE;
+    private static final int MAX_PRIORITY = 3;
+    private static ExpressionResolver instance;
 
     private ExpressionResolver() {
     }
 
     public static ExpressionResolver getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ExpressionResolver();
+        if (instance == null) {
+            instance = new ExpressionResolver();
         }
-        return INSTANCE;
+        return instance;
     }
 
     @Override
     public Expression resolve(String s) {
+        s = s.replaceAll("\\s+", "");
         return build(s, 0, s.length());
     }
 
@@ -31,6 +34,8 @@ public class ExpressionResolver implements Resolver<String> {
             case '*':
             case '/':
                 return 2;
+            case '^':
+                return 3;
             default:
                 return 0;
         }
@@ -46,6 +51,8 @@ public class ExpressionResolver implements Resolver<String> {
                 return Operation.MUL;
             case '/':
                 return Operation.DIV;
+            case '^':
+                return Operation.POW;
             default:
                 return null;
         }
@@ -73,18 +80,24 @@ public class ExpressionResolver implements Resolver<String> {
             }
             cursor++;
         }
-        if (minPriority == Integer.MAX_VALUE) {
-            return new Expression(
-                    new ExpressionValue(
-                            s.substring(startInclusive, endExclusive)
-                            .replace("(", "")
-                            .replace(")", "")
-                            .trim()
-                    )
-            );
+        try {
+            // Check if whole expression is function and return it if so
+            return ExpressionUtils.parseFunction(s, startInclusive, endExclusive);
+        } catch (ExpressionParseException e) {
+            // Otherwise, keep dividing expression
+            if (minPriority == Integer.MAX_VALUE) {
+                return new Expression(
+                        new ExpressionValue(
+                                s.substring(startInclusive, endExclusive)
+                                        .replace("(", "")
+                                        .replace(")", "")
+                                        .trim()
+                        )
+                );
+            }
+            Expression leftOperand = build(s, startInclusive, minPriorityOperationIndex);
+            Expression rightOperand = build(s, minPriorityOperationIndex + 1, endExclusive);
+            return new Expression(leftOperand, new ExpressionValue(getOperation(s.charAt(minPriorityOperationIndex))), rightOperand);
         }
-        Expression leftOperand = build(s, startInclusive, minPriorityOperationIndex);
-        Expression rightOperand = build(s, minPriorityOperationIndex + 1, endExclusive);
-        return new Expression(leftOperand, new ExpressionValue(getOperation(s.charAt(minPriorityOperationIndex))), rightOperand);
     }
 }

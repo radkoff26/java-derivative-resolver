@@ -1,18 +1,21 @@
 package com.radkoff26.calculus.model;
 
 public enum Operation {
-    ADD(1, "+"),
-    SUB(2, "-"),
-    DIV(3, "/"),
-    MUL(4, "*"),
-    POW(5, "^");
+    ADD(1, "+", false),
+    SUB(1, "-", false),
+    DIV(2, "/", false),
+    MUL(2, "*", false),
+    POW(3, "^", false),
+    LN(3, "ln", true);
 
     private final int priority;
     private final String definition;
+    private final boolean isFunction;
 
-    Operation(int priority, String definition) {
+    Operation(int priority, String definition, boolean isFunction) {
         this.priority = priority;
         this.definition = definition;
+        this.isFunction = isFunction;
     }
 
     public int getPriority() {
@@ -21,6 +24,10 @@ public enum Operation {
 
     public String getDefinition() {
         return definition;
+    }
+
+    public boolean isFunction() {
+        return isFunction;
     }
 
     public Operation getOperationByDefinition(String definition) {

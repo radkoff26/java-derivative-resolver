@@ -48,13 +48,28 @@ public class Expression {
             return expressionValue.getValue();
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        sb.append(leftOperand.toString());
-        sb.append(" ");
-        sb.append(expressionValue.getOperation().getDefinition());
-        sb.append(" ");
-        sb.append(rightOperand.toString());
-        sb.append(")");
+        if (expressionValue.getOperation().isFunction()) {
+            sb.append(expressionValue.getOperation().getDefinition());
+            if (rightOperand != null) {
+                sb.append("(");
+                sb.append(leftOperand.toString());
+                sb.append(", ");
+                sb.append(rightOperand.toString());
+                sb.append(")");
+            } else {
+                sb.append("(");
+                sb.append(leftOperand.toString());
+                sb.append(")");
+            }
+        } else {
+            sb.append("(");
+            sb.append(leftOperand.toString());
+            sb.append(" ");
+            sb.append(expressionValue.getOperation().getDefinition());
+            sb.append(" ");
+            sb.append(rightOperand.toString());
+            sb.append(")");
+        }
         return sb.toString();
     }
 }
