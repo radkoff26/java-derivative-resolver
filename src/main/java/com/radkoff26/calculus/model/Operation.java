@@ -6,7 +6,9 @@ public enum Operation {
     DIV(2, "/", false),
     MUL(2, "*", false),
     POW(3, "^", false),
-    LN(3, "ln", true);
+    LN(3, "ln", true),
+    SIN(3, "sin", true),
+    COS(3, "cos", true);
 
     private final int priority;
     private final String definition;

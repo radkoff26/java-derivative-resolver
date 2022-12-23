@@ -8,7 +8,7 @@ public class SimplificationResolver implements Resolver<Expression> {
 
     @Override
     public Expression resolve(Expression expression) {
-        if (expression.getExpressionValue().isValue()) {
+        if (expression == null || expression.getExpressionValue().isValue() || expression.getLeftOperand() == null) {
             return expression;
         }
         expression.setLeftOperand(resolve(expression.getLeftOperand()));
@@ -30,7 +30,7 @@ public class SimplificationResolver implements Resolver<Expression> {
                         case MUL:
                             return new Expression(new ExpressionValue(String.valueOf(a * b)));
                         case DIV:
-                            return new Expression(new ExpressionValue(String.valueOf(a / b)));
+                            return expression;
                         case POW:
                             if (b == 0) {
                                 return new Expression(new ExpressionValue("1"));

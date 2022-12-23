@@ -12,22 +12,16 @@ import com.radkoff26.calculus.model.Rule;
 import com.radkoff26.calculus.model.RuleParam;
 
 public class DerivativeResolver implements Resolver<Expression> {
-    private static DerivativeResolver instance;
     private RuleConfig ruleConfig;
+    private final SimplificationResolver simplificationResolver;
 
-    private DerivativeResolver() {
+    public DerivativeResolver() {
+        this.simplificationResolver = new SimplificationResolver();
         try {
             this.ruleConfig = new RuleConfig();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static DerivativeResolver getInstance() {
-        if (instance == null) {
-            instance = new DerivativeResolver();
-        }
-        return instance;
     }
 
     @Override
@@ -63,7 +57,7 @@ public class DerivativeResolver implements Resolver<Expression> {
             }
             map.put(ruleParam, currentExpression);
         });
-        return walkAndFillDerivative(rule.getExpressionPattern(), map);
+        return simplificationResolver.resolve(walkAndFillDerivative(new Expression(rule.getExpressionPattern()), map));
     }
 
     private Expression walkAndFillDerivative(Expression expression, Map<RuleParam, Expression> map) {

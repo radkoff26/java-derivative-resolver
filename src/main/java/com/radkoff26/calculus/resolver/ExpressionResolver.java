@@ -8,16 +8,8 @@ import com.radkoff26.calculus.util.ExpressionUtils;
 
 public class ExpressionResolver implements Resolver<String> {
     private static final int MAX_PRIORITY = 3;
-    private static ExpressionResolver instance;
 
-    private ExpressionResolver() {
-    }
-
-    public static ExpressionResolver getInstance() {
-        if (instance == null) {
-            instance = new ExpressionResolver();
-        }
-        return instance;
+    public ExpressionResolver() {
     }
 
     @Override

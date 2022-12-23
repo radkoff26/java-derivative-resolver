@@ -43,7 +43,7 @@ public class ExpressionUtils {
             if (args.length == 0) {
                 throw new ExpressionParseException("Given function has no arguments!");
             }
-            Resolver<String> resolver = ExpressionResolver.getInstance();
+            Resolver<String> resolver = new ExpressionResolver();
             result.setLeftOperand(resolver.resolve(args[0]));
             if (args.length > 1) {
                 result.setRightOperand(resolver.resolve(args[1]));

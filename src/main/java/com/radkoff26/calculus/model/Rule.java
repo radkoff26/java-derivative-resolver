@@ -10,7 +10,7 @@ public class Rule {
 
     public Rule(List<RuleParam> params, String stringPattern) {
         this.params = params;
-        this.expressionPattern = ExpressionResolver.getInstance().resolve(stringPattern);
+        this.expressionPattern = new ExpressionResolver().resolve(stringPattern);
     }
 
     public List<RuleParam> getParams() {

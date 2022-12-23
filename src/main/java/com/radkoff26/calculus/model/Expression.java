@@ -14,6 +14,16 @@ public class Expression {
         this.rightOperand = rightOperand;
     }
 
+    public Expression(Expression expression) {
+        this.expressionValue = new ExpressionValue(expression.expressionValue);
+        if (expression.leftOperand != null) {
+            this.leftOperand = new Expression(expression.leftOperand);
+        }
+        if (expression.rightOperand != null) {
+            this.rightOperand = new Expression(expression.rightOperand);
+        }
+    }
+
     public Expression(ExpressionValue expressionValue) {
         this.expressionValue = expressionValue;
     }
@@ -62,13 +72,20 @@ public class Expression {
                 sb.append(")");
             }
         } else {
-            sb.append("(");
-            sb.append(leftOperand.toString());
-            sb.append(" ");
-            sb.append(expressionValue.getOperation().getDefinition());
-            sb.append(" ");
-            sb.append(rightOperand.toString());
-            sb.append(")");
+            if (leftOperand == null && getExpressionValue().getOperation() == Operation.SUB) {
+                sb.append("(");
+                sb.append(expressionValue.getOperation().getDefinition());
+                sb.append(rightOperand.toString());
+                sb.append(")");
+            } else {
+                sb.append("(");
+                sb.append(leftOperand.toString());
+                sb.append(" ");
+                sb.append(expressionValue.getOperation().getDefinition());
+                sb.append(" ");
+                sb.append(rightOperand.toString());
+                sb.append(")");
+            }
         }
         return sb.toString();
     }
