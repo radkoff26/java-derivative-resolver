@@ -1,6 +1,10 @@
 package com.radkoff26.calculus.util;
 
 public class DoubleUtils {
+
+    private DoubleUtils() {
+    }
+
     public static boolean isParseableToDouble(String s) {
         if (s == null) {
             return false;

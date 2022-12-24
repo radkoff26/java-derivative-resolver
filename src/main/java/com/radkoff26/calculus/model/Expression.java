@@ -59,25 +59,31 @@ public class Expression {
         }
         StringBuilder sb = new StringBuilder();
         if (expressionValue.getOperation().isFunction()) {
+            // In case, when expression represents a function, then it's written in particular way
             sb.append(expressionValue.getOperation().getDefinition());
             if (rightOperand != null) {
+                // Two arg function
                 sb.append("(");
                 sb.append(leftOperand.toString());
                 sb.append(", ");
                 sb.append(rightOperand.toString());
                 sb.append(")");
             } else {
+                // One arg function
                 sb.append("(");
                 sb.append(leftOperand.toString());
                 sb.append(")");
             }
         } else {
+            // Otherwise, this is not a function but operation
             if (leftOperand == null && getExpressionValue().getOperation() == Operation.SUB) {
+                // Unary minus operation
                 sb.append("(");
                 sb.append(expressionValue.getOperation().getDefinition());
                 sb.append(rightOperand.toString());
                 sb.append(")");
             } else {
+                // Other operations
                 sb.append("(");
                 sb.append(leftOperand.toString());
                 sb.append(" ");

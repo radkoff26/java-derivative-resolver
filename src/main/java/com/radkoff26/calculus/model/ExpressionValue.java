@@ -29,23 +29,8 @@ public class ExpressionValue {
         }
     }
 
-    public boolean isOperation() {
-        return operation != null;
-    }
-
     public boolean isValue() {
         return value != null;
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-        if (!DoubleUtils.isParseableToDouble(value) && !value.equals("e") && !value.equals("pi")) {
-            isVariable = true;
-        }
     }
 
     public boolean isVariable() {

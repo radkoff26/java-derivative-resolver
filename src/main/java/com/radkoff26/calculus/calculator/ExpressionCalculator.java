@@ -1,8 +1,10 @@
 package com.radkoff26.calculus.calculator;
 
 import com.radkoff26.calculus.model.Expression;
+import com.radkoff26.calculus.model.MathConstants;
 import com.radkoff26.calculus.model.Operation;
 
+// Here is a class which calculates value of the expression in the particular point
 public class ExpressionCalculator {
     private final String variable;
 
@@ -11,21 +13,29 @@ public class ExpressionCalculator {
     }
 
     public double calculateExpression(Expression expression, double valueOfVariable) {
+        // The expression can be null
         if (expression == null) {
             return 0;
         }
+        // If expression is value
         if (expression.getExpressionValue().isValue()) {
-            if (expression.getExpressionValue().getValue().equals(variable)) {
+            String value = expression.getExpressionValue().getValue();
+            // Then it's changed to the value of point by the given variable
+            if (value.equals(variable)) {
                 return valueOfVariable;
             }
-            if (expression.getExpressionValue().getValue().equals("e")) {
+            // Or this expression represents a constant E
+            if (value.equals(MathConstants.E.getStringValue())) {
                 return Math.E;
             }
-            if (expression.getExpressionValue().getValue().equals("pi")) {
+            // Or this expression represents a constant PI
+            if (value.equals(MathConstants.PI.getStringValue())) {
                 return Math.PI;
             }
-            return Double.parseDouble(expression.getExpressionValue().getValue());
+            // Otherwise, this is a numeric parseable value which will be parsed and returned
+            return Double.parseDouble(value);
         }
+        // When the expression is not a value but an operation, it's calculated
         return calculateExpressionOperation(
                 calculateExpression(expression.getLeftOperand(), valueOfVariable),
                 expression.getExpressionValue().getOperation(),

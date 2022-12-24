@@ -34,14 +34,4 @@ public enum Operation {
     public boolean isFunction() {
         return isFunction;
     }
-
-    public Operation getOperationByDefinition(String definition) {
-        Operation[] operations = Operation.values();
-        for (Operation operation : operations) {
-            if (operation.getDefinition().equals(definition)) {
-                return operation;
-            }
-        }
-        return null;
-    }
 }

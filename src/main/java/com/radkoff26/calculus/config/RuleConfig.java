@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 import com.radkoff26.calculus.model.Operation;
 import com.radkoff26.calculus.model.Rule;
-import com.radkoff26.calculus.model.RuleParam;
+import com.radkoff26.calculus.util.OperationUtils;
+import com.radkoff26.calculus.util.RuleParamUtils;
 
 public class RuleConfig {
     private final Map<Operation, Rule> rules;
@@ -26,18 +27,20 @@ public class RuleConfig {
 
     private Map<Operation, Rule> loadRules() throws IOException {
         Map<Operation, Rule> rulesMap = new EnumMap<>(Operation.class);
+        // Read rules for derivation
         try (BufferedReader reader = new BufferedReader(new FileReader(Paths.get("src", "main", "resources", "rules.cfg").toFile()))) {
             while (reader.ready()) {
+                // Each line has formatting: operation=args=pattern
                 String line = reader.readLine();
                 String[] lineParams = line.split("=");
-                Operation op = Operation.ADD.getOperationByDefinition(lineParams[0]);
+                Operation op = OperationUtils.getOperationOrFunction(lineParams[0]);
                 String[] params = lineParams[1].split(",");
                 String pattern = lineParams[2];
                 rulesMap.put(
                         op,
                         new Rule(
                                 Arrays.stream(params)
-                                        .map(RuleParam.LEFT::getParamByDefinition)
+                                        .map(RuleParamUtils::getParamByDefinition)
                                         .collect(Collectors.toList()),
                                 pattern
                         )

@@ -15,14 +15,4 @@ public enum RuleParam {
     public String getDefinition() {
         return definition;
     }
-
-    public RuleParam getParamByDefinition(String definition) {
-        RuleParam[] ruleParams = RuleParam.values();
-        for (RuleParam ruleParam : ruleParams) {
-            if (ruleParam.getDefinition().equals(definition)) {
-                return ruleParam;
-            }
-        }
-        return null;
-    }
 }

@@ -9,12 +9,14 @@ import com.radkoff26.calculus.resolver.SimplificationResolver;
 
 public class Main {
     public static void main(String[] args) {
+        // Here is a subtle example how the project is working
+        // You create necessary resolvers
         Resolver<String> expressionResolver = new ExpressionResolver();
         Resolver<Expression> derivativeResolver = new DerivativeResolver();
+        // This resolver is not necessary to use since derivative resolver does this job itself
         Resolver<Expression> simplificationResolver = new SimplificationResolver();
+        // Calculator to find out the value of the expression in the certain point
         ExpressionCalculator expressionCalculator = new ExpressionCalculator("x");
-        Expression expression = expressionResolver.resolve("e ^ x");
-        Expression derivative = derivativeResolver.resolve(expression);
-        System.out.println(derivative);
+        // ...
     }
 }

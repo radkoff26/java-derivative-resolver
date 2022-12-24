@@ -1,6 +1,5 @@
 package com.radkoff26.calculus.util;
 
-import com.radkoff26.calculus.exception.ExpressionParseException;
 import com.radkoff26.calculus.model.Expression;
 import com.radkoff26.calculus.model.ExpressionValue;
 import com.radkoff26.calculus.model.Operation;
@@ -8,7 +7,11 @@ import com.radkoff26.calculus.resolver.ExpressionResolver;
 import com.radkoff26.calculus.resolver.Resolver;
 
 public class ExpressionUtils {
-    public static Expression parseFunction(String expression, int startInclusive, int endExclusive) throws ExpressionParseException {
+
+    private ExpressionUtils() {
+    }
+
+    public static Expression parseFunction(String expression, int startInclusive, int endExclusive) {
         int i = startInclusive;
         Expression result = new Expression();
         while (expression.charAt(i) == '(') {
@@ -20,13 +23,13 @@ public class ExpressionUtils {
                 function.append(expression.charAt(i));
                 i++;
             }
-            Operation operation = Operation.ADD.getOperationByDefinition(function.toString());
+            Operation operation = OperationUtils.getOperationOrFunction(function.toString());
             if (operation == null) {
-                throw new ExpressionParseException("Unknown function is parsed!");
+                return null;
             }
             result.setExpressionValue(new ExpressionValue(operation));
         } else {
-            throw new ExpressionParseException("Given expression is not a function!");
+            return null;
         }
         if (expression.charAt(i) == '(' && i < endExclusive) {
             int folding = 1;
@@ -41,7 +44,7 @@ public class ExpressionUtils {
             }
             String[] args = expression.substring(start, i).split(",");
             if (args.length == 0) {
-                throw new ExpressionParseException("Given function has no arguments!");
+                return null;
             }
             Resolver<String> resolver = new ExpressionResolver();
             result.setLeftOperand(resolver.resolve(args[0]));
@@ -49,11 +52,11 @@ public class ExpressionUtils {
                 result.setRightOperand(resolver.resolve(args[1]));
             }
         } else {
-            throw new ExpressionParseException("Given expression is not a function!");
+            return null;
         }
         boolean hasOperations = false;
         while (i < endExclusive) {
-            Operation operation = Operation.ADD.getOperationByDefinition(String.valueOf(expression.charAt(i)));
+            Operation operation = OperationUtils.getOperationOrFunction(String.valueOf(expression.charAt(i)));
             if (operation != null) {
                 hasOperations = true;
                 break;
@@ -61,7 +64,7 @@ public class ExpressionUtils {
             i++;
         }
         if (hasOperations) {
-            throw new ExpressionParseException("Given expression contains not only function!");
+            return null;
         }
         return result;
     }
